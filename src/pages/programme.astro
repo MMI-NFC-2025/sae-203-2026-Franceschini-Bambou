@@ -1,0 +1,94 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const programmeJour1 = [
+	{ heure: "14:00", artiste: "DJ Sunset", scene: "Scène du kiosque" },
+	{ heure: "16:00", artiste: "Les Harmoniques", scene: "Scène du pavillon" },
+	{ heure: "18:00", artiste: "Electric Waves", scene: "Scène du kiosque" },
+	{ heure: "20:00", artiste: "Nuit Blanche", scene: "Scène du pavillon" },
+	{ heure: "22:00", artiste: "Stellar Sound", scene: "Scène du kiosque" },
+];
+
+const programmeJour2 = [
+	{ heure: "14:00", artiste: "Morning Light", scene: "Scène du pavillon" },
+	{ heure: "16:00", artiste: "Urban Beat", scene: "Scène du kiosque" },
+	{ heure: "18:00", artiste: "Acoustic Dreams", scene: "Scène du pavillon" },
+	{ heure: "20:00", artiste: "Night Vibes", scene: "Scène du kiosque" },
+	{ heure: "22:00", artiste: "Final Encore", scene: "Scène du kiosque" },
+];
+---
+
+<Layout title="Programme - Jumelages">
+	<Header />
+	
+	<main class="pt-32 pb-20 px-6">
+		<div class="max-w-4xl mx-auto">
+			<h1 class="font-[family-name:var(--font-display)] text-5xl md:text-7xl font-bold text-[var(--color-foreground)] mb-4 text-center">
+				Le programme
+			</h1>
+			<p class="text-[var(--color-muted)] text-center mb-16">
+				29 et 30 août 2024
+			</p>
+			
+			<!-- Jour 1 -->
+			<section class="mb-16">
+				<h2 class="font-[family-name:var(--font-display)] text-2xl md:text-3xl font-bold text-[var(--color-primary)] mb-8">
+					Samedi 29 août
+				</h2>
+				
+				<div class="space-y-4">
+					{programmeJour1.map((item) => (
+						<article class="group flex items-center gap-6 p-4 rounded-xl bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/80 transition-colors">
+							<span class="font-[family-name:var(--font-display)] text-lg font-semibold text-[var(--color-primary)] min-w-[60px]">
+								{item.heure}
+							</span>
+							<div class="flex-1">
+								<h3 class="font-semibold text-[var(--color-foreground)] group-hover:text-[var(--color-primary)] transition-colors">
+									{item.artiste}
+								</h3>
+								<p class="text-sm text-[var(--color-muted)]">
+									{item.scene}
+								</p>
+							</div>
+							<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[var(--color-muted)] group-hover:text-[var(--color-primary)] transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+							</svg>
+						</article>
+					))}
+				</div>
+			</section>
+			
+			<!-- Jour 2 -->
+			<section>
+				<h2 class="font-[family-name:var(--font-display)] text-2xl md:text-3xl font-bold text-[var(--color-primary)] mb-8">
+					Dimanche 30 août
+				</h2>
+				
+				<div class="space-y-4">
+					{programmeJour2.map((item) => (
+						<article class="group flex items-center gap-6 p-4 rounded-xl bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/80 transition-colors">
+							<span class="font-[family-name:var(--font-display)] text-lg font-semibold text-[var(--color-primary)] min-w-[60px]">
+								{item.heure}
+							</span>
+							<div class="flex-1">
+								<h3 class="font-semibold text-[var(--color-foreground)] group-hover:text-[var(--color-primary)] transition-colors">
+									{item.artiste}
+								</h3>
+								<p class="text-sm text-[var(--color-muted)]">
+									{item.scene}
+								</p>
+							</div>
+							<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[var(--color-muted)] group-hover:text-[var(--color-primary)] transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+							</svg>
+						</article>
+					))}
+				</div>
+			</section>
+		</div>
+	</main>
+	
+	<Footer />
+</Layout>

@@ -1,0 +1,75 @@
+---
+const currentPath = Astro.url.pathname;
+---
+
+<header class="fixed top-0 left-0 right-0 z-50 px-6 py-4">
+  <nav class="flex items-center justify-between max-w-7xl mx-auto">
+    <a href="/" class="font-[family-name:var(--font-display)] text-2xl font-bold tracking-tight text-[var(--color-foreground)] hover:text-[var(--color-primary)] transition-colors">
+      Jumelages
+    </a>
+    
+    <ul class="hidden md:flex items-center gap-8">
+      <li>
+        <a 
+          href="/infos-pratiques" 
+          class={`text-sm font-medium transition-colors hover:text-[var(--color-primary)] ${currentPath === '/infos-pratiques' ? 'text-[var(--color-primary)]' : 'text-[var(--color-accent)]'}`}
+        >
+          infos pratiques
+        </a>
+      </li>
+      <li>
+        <a 
+          href="/invites" 
+          class={`text-sm font-medium transition-colors hover:text-[var(--color-primary)] ${currentPath === '/invites' ? 'text-[var(--color-primary)]' : 'text-[var(--color-accent)]'}`}
+        >
+          invités
+        </a>
+      </li>
+      <li>
+        <a 
+          href="/programme" 
+          class={`text-sm font-medium transition-colors hover:text-[var(--color-primary)] ${currentPath === '/programme' ? 'text-[var(--color-primary)]' : 'text-[var(--color-accent)]'}`}
+        >
+          programme
+        </a>
+      </li>
+    </ul>
+
+    <!-- Mobile menu button -->
+    <button id="mobile-menu-btn" class="md:hidden text-[var(--color-foreground)]" aria-label="Menu">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+      </svg>
+    </button>
+  </nav>
+
+  <!-- Mobile menu -->
+  <div id="mobile-menu" class="hidden md:hidden mt-4 pb-4 border-b border-[var(--color-muted)]/20">
+    <ul class="flex flex-col gap-4">
+      <li>
+        <a href="/infos-pratiques" class="text-sm font-medium text-[var(--color-accent)] hover:text-[var(--color-primary)] transition-colors">
+          infos pratiques
+        </a>
+      </li>
+      <li>
+        <a href="/invites" class="text-sm font-medium text-[var(--color-accent)] hover:text-[var(--color-primary)] transition-colors">
+          invités
+        </a>
+      </li>
+      <li>
+        <a href="/programme" class="text-sm font-medium text-[var(--color-accent)] hover:text-[var(--color-primary)] transition-colors">
+          programme
+        </a>
+      </li>
+    </ul>
+  </div>
+</header>
+
+<script>
+  const menuBtn = document.getElementById('mobile-menu-btn');
+  const mobileMenu = document.getElementById('mobile-menu');
+  
+  menuBtn?.addEventListener('click', () => {
+    mobileMenu?.classList.toggle('hidden');
+  });
+</script>

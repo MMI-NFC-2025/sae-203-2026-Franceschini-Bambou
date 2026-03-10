@@ -1,10 +1,86 @@
 ---
 import Layout from '../layouts/Layout.astro';
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import SceneCard from '../components/SceneCard.astro';
 ---
 
-<Layout>
-	<h1>Welcome to Astro!</h1>
+<Layout title="Jumelages - Festival 29 & 30 août">
+	<Header />
+	
+	<!-- Hero Section -->
+	<section class="relative min-h-screen flex flex-col items-center justify-center px-6 overflow-hidden">
+		<!-- Background decoration -->
+		<div class="absolute inset-0 overflow-hidden">
+			<div class="absolute top-1/4 left-1/4 w-96 h-96 bg-[var(--color-primary)]/10 rounded-full blur-3xl"></div>
+			<div class="absolute bottom-1/4 right-1/4 w-80 h-80 bg-[var(--color-primary)]/5 rounded-full blur-3xl"></div>
+		</div>
+		
+		<div class="relative text-center max-w-4xl mx-auto">
+			<h1 class="font-[family-name:var(--font-display)] text-6xl md:text-8xl lg:text-9xl font-bold tracking-tight text-[var(--color-foreground)] mb-6">
+				Jumelages
+			</h1>
+			
+			<nav class="flex flex-wrap items-center justify-center gap-4 md:gap-8 mb-8">
+				<a href="/programme" class="text-sm md:text-base text-[var(--color-accent)] hover:text-[var(--color-primary)] transition-colors">
+					programme
+				</a>
+				<span class="text-[var(--color-muted)]">*</span>
+				<a href="/invites" class="text-sm md:text-base text-[var(--color-accent)] hover:text-[var(--color-primary)] transition-colors">
+					invités
+				</a>
+				<span class="text-[var(--color-muted)]">*</span>
+				<a href="/infos-pratiques" class="text-sm md:text-base text-[var(--color-accent)] hover:text-[var(--color-primary)] transition-colors">
+					infos pratiques
+				</a>
+			</nav>
+			
+			<p class="font-[family-name:var(--font-display)] text-2xl md:text-4xl font-semibold text-[var(--color-primary)]">
+				29.30 août
+			</p>
+		</div>
+		
+		<!-- Scroll indicator -->
+		<div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
+			<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[var(--color-muted)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+			</svg>
+		</div>
+	</section>
+	
+	<!-- Scenes Section -->
+	<section class="py-20 px-6">
+		<div class="max-w-7xl mx-auto">
+			<h2 class="font-[family-name:var(--font-display)] text-4xl md:text-5xl font-bold text-[var(--color-foreground)] mb-12 text-center">
+				Scènes
+			</h2>
+			
+			<div class="grid md:grid-cols-2 gap-6 md:gap-8">
+				<SceneCard 
+					title="Scène du kiosque" 
+					description="Découvrez les artistes sur la scène principale du kiosque"
+				/>
+				<SceneCard 
+					title="Scène du pavillon" 
+					description="Une ambiance intimiste au coeur du pavillon"
+				/>
+			</div>
+			
+			<!-- Navigation arrows -->
+			<div class="flex items-center justify-center gap-4 mt-8">
+				<button class="p-3 rounded-full border border-[var(--color-muted)]/30 hover:border-[var(--color-primary)] hover:text-[var(--color-primary)] transition-colors" aria-label="Précédent">
+					<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+					</svg>
+				</button>
+				<button class="p-3 rounded-full border border-[var(--color-muted)]/30 hover:border-[var(--color-primary)] hover:text-[var(--color-primary)] transition-colors" aria-label="Suivant">
+					<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+					</svg>
+				</button>
+			</div>
+		</div>
+	</section>
+	
+	<Footer />
 </Layout>

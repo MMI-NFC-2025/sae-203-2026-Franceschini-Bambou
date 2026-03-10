@@ -1,0 +1,32 @@
+---
+interface Props {
+  title: string;
+  image?: string;
+  description?: string;
+}
+
+const { title, image, description } = Astro.props;
+---
+
+<article class="group relative overflow-hidden rounded-2xl bg-[var(--color-secondary)] aspect-[4/5]">
+  {image && (
+    <img 
+      src={image} 
+      alt={title} 
+      class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-80 group-hover:scale-105 transition-all duration-500"
+    />
+  )}
+  
+  <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+  
+  <div class="absolute bottom-0 left-0 right-0 p-6">
+    <h3 class="font-[family-name:var(--font-display)] text-xl md:text-2xl font-bold text-[var(--color-foreground)] mb-2">
+      {title}
+    </h3>
+    {description && (
+      <p class="text-[var(--color-accent)] text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+        {description}
+      </p>
+    )}
+  </div>
+</article>
