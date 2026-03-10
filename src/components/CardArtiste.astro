@@ -1,0 +1,74 @@
+---
+import { getImageUrl } from '../../backend/backend.mjs';
+import PocketBase from 'pocketbase';
+
+const { artistes } = Astro.props;
+const pb = new PocketBase('http://localhost:8090');
+
+if (!artistes) {
+  throw new Error('CardArtiste require une prop "artistes"');
+}
+
+let sceneName = '';
+if (artistes.scene) {
+  try {
+    const scene = await pb.collection('scene').getOne(artistes.scene);
+    sceneName = scene.nom || '';
+  } catch (e) {
+    console.warn(`Impossible de récupérer la scène pour l'artiste ${artistes.nom}`);
+  }
+}
+
+const formatDate = (dateString?: string) => {
+  if (!dateString) return '';
+  try {
+    const date = new Date(dateString);
+    const day = date.getDate();
+    const month = date.toLocaleString('fr-FR', { month: 'long' });
+    const hour = String(date.getHours()).padStart(2, '0');
+    const minute = String(date.getMinutes()).padStart(2, '0');
+    return `${day}-${day} ${month.toUpperCase()} ${hour}H${minute}`;
+  } catch (e) {
+    return '';
+  }
+};
+
+const imageUrl = artistes.image ? getImageUrl(artistes, artistes.image) : '';
+const artistes.date_de_representation = formatDate(artistes.date_de_representation);
+---
+
+<div class="flex flex-col items-center">
+  <!-- Image circulaire -->
+  <div class="w-32 h-32 rounded-full overflow-hidden border-4 border-slate-900 shadow-lg mb-6">
+    {imageUrl ? (
+      <img 
+        src={imageUrl}
+        alt={artistes.nom || 'Artiste'}
+        class="w-full h-full object-cover"
+      />
+    ) : (
+      <div class="w-full h-full bg-gray-300 flex items-center justify-center text-gray-600 text-xs font-semibold">
+        {artistes.nom || 'Artiste'}
+      </div>
+    )}
+  </div>
+
+    {artistes.nom && (
+      <h3 class="text-xl font-bold text-slate-900 mb-4 uppercase tracking-wide line-clamp-2">
+        {artistes.nom}
+      </h3>
+    )}
+
+    {artistes.date_de_representation && (
+      <p class="text-sm text-slate-900 font-semibold mb-2">
+        {artistes.date_de_representation}
+      </p>
+    )}
+
+    {artistes.scene && (
+      <p class="text-sm text-slate-900 font-semibold uppercase tracking-wide">
+        {artistes.scene}
+      </p>
+    )}
+  </div>
+</div>

@@ -1,0 +1,31 @@
+---
+import Layout from '../layouts/Layout.astro';
+import CardArtiste from '../components/CardArtiste.astro';
+import PocketBase from 'pocketbase';
+
+const pb = new PocketBase('http://localhost:8090');
+const artistes = await pb.collection('artiste').getFullList({ sort: 'date_de_representation' });
+---
+
+<Layout title="Jumelages - Artistes">
+	<section class="w-full py-12 px-4">
+		<!-- Titre -->
+		<h1 class="text-4xl sm:text-5xl font-bold text-slate-900 text-center mb-12 uppercase tracking-wide">
+			Les Artistes
+		</h1>
+
+		<!-- Grille de cartes -->
+		<div class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+			{artistes.map((artiste) => (
+				<CardArtiste artiste={artiste} />
+			))}
+		</div>
+
+		<!-- Message si aucun artiste -->
+		{artistes.length === 0 && (
+			<div class="text-center py-12">
+				<p class="text-lg text-slate-600">Aucun artiste disponible pour le moment</p>
+			</div>
+		)}
+	</section>
+</Layout>

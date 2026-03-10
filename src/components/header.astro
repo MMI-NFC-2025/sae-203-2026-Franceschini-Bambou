@@ -1,0 +1,90 @@
+---
+import vacheFonce from '../assets/icones/vache/vache-fonce.svg';
+import vacheClaire from '../assets/icones/vache/vache-claire.svg';
+---
+
+
+<a href="/" class="header__link fixed top-2.5 left-2.5 w-12 h-12 z-20">
+  <img src={vacheFonce.src} alt="Logo Jumelages" class="w-full h-full object-contain" />
+</a>
+
+<button 
+  class="header__menu-btn fixed top-2.5 right-2.5 w-8 h-8 m-2 flex flex-col justify-center items-center bg-transparent border-none cursor-pointer z-20" 
+  id="menuToggle" 
+  aria-label="menu" 
+  aria-expanded="false"
+  aria-controls="mobileMenu"
+>
+  <span class="menu-btn__bar--top block w-full h-0.5 bg-slate-900 absolute bottom-2 transition-all" aria-hidden="true"></span>
+  <span class="menu-btn__bar--bottom block w-full h-0.5 bg-slate-900 absolute top-2 transition-all" aria-hidden="true"></span>
+</button>
+
+
+<div 
+  id="menuOverlay"
+  class="fixed inset-0 bg-black/50 z-40 opacity-0 pointer-events-none transition-opacity duration-300"
+  aria-hidden="true"
+></div>
+
+
+<nav 
+  id="mobileMenu" 
+  class="mobile-menu fixed inset-0 bg-slate-900 z-50 flex flex-col overflow-y-auto -translate-x-full transition-transform duration-300"
+  aria-hidden="true"
+>
+
+  <div class="menu-header flex items-center justify-between px-2 py-8">
+    <button 
+      class="menu-close absolute top-1.5 right-5 bg-transparent border-none p-2 text-yellow-400 cursor-pointer text-4xl flex items-center justify-center" 
+      id="menuClose" 
+      aria-label="Fermer le menu"
+    >
+      <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+  </div>
+
+
+  <ul class="menu-list list-none m-0 pt-5 bg-slate-900">
+    <li><a href="/programme" class="block px-5 py-8 text-white font-playfair text-2xl font-semibold no-underline bg-slate-900 hover:bg-white/5 transition-colors">Programmes</a></li>
+    <li><a href="/artiste" class="block px-5 py-8 text-white font-playfair text-2xl font-semibold no-underline bg-slate-900 hover:bg-white/5 transition-colors">Invités</a></li>
+    <li><a href="/scene" class="block px-5 py-8 text-white font-playfair text-2xl font-semibold no-underline bg-slate-900 hover:bg-white/5 transition-colors">Scènes</a></li>
+    <li><a href="/infosPratiques" class="block px-5 py-8 text-white font-playfair text-2xl font-semibold no-underline bg-slate-900 hover:bg-white/5 transition-colors">Infos Pratique</a></li>
+  </ul>
+
+  <div class="menu-footer flex justify-center items-center flex-1 ">
+    <a href="/" class="flex items-center justify-center">
+      <img src={vacheClaire.src} alt="Logo Jumelages" class="w-48 h-48 object-contain" />
+    </a>
+  </div>
+</nav>
+
+<script>
+  const menuToggle = document.getElementById('menuToggle') as HTMLButtonElement | null;
+  const menuClose = document.getElementById('menuClose') as HTMLButtonElement | null;
+  const mobileMenu = document.getElementById('mobileMenu') as HTMLElement | null;
+  const menuOverlay = document.getElementById('menuOverlay') as HTMLElement | null;
+
+  if (menuToggle && menuClose && mobileMenu && menuOverlay) {
+    const toggleMenu = () => {
+      const isOpen = mobileMenu!.classList.contains('translate-x-0');
+      
+      if (isOpen) {
+        mobileMenu!.classList.remove('translate-x-0');
+        menuOverlay!.classList.remove('opacity-100', 'pointer-events-auto');
+        menuToggle!.setAttribute('aria-expanded', 'false');
+      } else {
+        mobileMenu!.classList.add('translate-x-0');
+        menuOverlay!.classList.add('opacity-100', 'pointer-events-auto');
+        menuToggle!.setAttribute('aria-expanded', 'true');
+      }
+    };
+
+    menuToggle.addEventListener('click', toggleMenu);
+    menuClose.addEventListener('click', toggleMenu);
+    
+    // Fermer le menu au clic sur le overlay
+    menuOverlay.addEventListener('click', toggleMenu);
+  }
+</script>

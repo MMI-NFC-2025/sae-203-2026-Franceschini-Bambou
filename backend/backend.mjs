@@ -1,6 +1,11 @@
 import PocketBase from 'pocketbase'; 
 const pb = new PocketBase('http://127.0.0.1:8090');
 
+export function getImageUrl(record, filename) {
+    if (!record || !filename) return null;
+    return `http://127.0.0.1:8090/api/files/${record.collectionId}/${record.id}/${filename}`;
+}
+
 export async function artistesSorted() { 
     const records = await pb.collection('artiste').getFullList({ sort: 'date_de_representation' }); 
     return records; 

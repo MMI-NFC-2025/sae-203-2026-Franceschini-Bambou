@@ -1,0 +1,41 @@
+---
+import vacheClaire from '../assets/icones/vache/vache-claire.svg';
+import facebookIcon from '../assets/icones/reseaux/facebook.svg';
+import instagramIcon from '../assets/icones/reseaux/instagram.svg';
+import tiktokIcon from '../assets/icones/reseaux/tik-tok.svg';
+---
+
+<footer class="relative bg-slate-900 text-gray-400 py-12 box-border min-h-80">
+  <nav class="footer__nav px-4">
+    <ul class="flex flex-col gap-8 md:flex-row md:justify-between">
+      <!-- Contact info -->
+      <ul class="list-none m-0 p-0 text-gray-400">
+        <li class="mb-2">Jumelages@gmail.com</li>
+        <li class="mb-2">01 72 68 23 96</li>
+        <li>25 200 Montbéliard</li>
+      </ul>
+
+      <!-- Social links -->
+      <ul class="list-none m-0 p-0">
+        <li class="flex items-center gap-2.5 my-1.5">
+          <img src={facebookIcon.src} alt="logo facebook" class="w-5 h-5 object-contain shrink-0" />
+          <a class="text-gray-400 no-underline inline" href="https://facebook.com">Facebook</a>
+        </li>
+        <li class="flex items-center gap-2.5 my-1.5">
+          <img src={instagramIcon.src} alt="logo instagram" class="w-5 h-5 object-contain shrink-0" />
+          <a class="text-gray-400 no-underline inline" href="https://instagram.com">Instagram</a>
+        </li>
+        <li class="flex items-center gap-2.5 my-1.5">
+          <img src={tiktokIcon.src} alt="logo tiktok" class="w-5 h-5 object-contain shrink-0" />
+          <a class="text-gray-400 no-underline inline" href="https://tiktok.com">Tiktok</a>
+        </li>
+      </ul>
+    </ul>
+  </nav>
+
+  <div class="flex justify-center mt-6">
+    <a href="/" class="flex items-center justify-center">
+      <img src={vacheClaire.src} alt="Logo Jumelages" class="w-40 h-auto object-contain" />
+    </a>
+  </div>
+</footer>
