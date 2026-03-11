@@ -3,7 +3,8 @@ import { getImageUrl } from '../../backend/backend.mjs';
 import PocketBase from 'pocketbase';
 
 const { artiste } = Astro.props;
-const pb = new PocketBase('http://localhost:8090');
+const pbUrl = import.meta.env.PUBLIC_POCKETBASE_URL || 'http://localhost:8090';
+const pb = new PocketBase(pbUrl);
 
 if (!artiste) {
   throw new Error('CardArtiste require une prop "artiste"');

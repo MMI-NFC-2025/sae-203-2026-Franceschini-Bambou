@@ -3,7 +3,8 @@ import Layout from '../layouts/Layout.astro';
 import Carousel from '../components/Carousel.astro';
 import PocketBase from 'pocketbase';
 
-const pb = new PocketBase('http://localhost:8090');
+const pbUrl = import.meta.env.PUBLIC_POCKETBASE_URL || 'http://localhost:8090';
+const pb = new PocketBase(pbUrl);
 const scenes = await pb.collection('scene').getFullList();
 ---
 
