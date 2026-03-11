@@ -42,6 +42,11 @@ export async function allartistebysceneName(nom) {
     return records; 
 }
 
+export async function byDate(date) {
+    const records = await pb.collection('artiste').getFullList({ filter: `date_de_representation="${date}"`, sort: 'nom' });
+    return records;
+}
+
 export async function addArtiste(artisteData) {
     try {
         const record = await pb.collection('artiste').create(artisteData);

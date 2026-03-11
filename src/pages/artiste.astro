@@ -4,7 +4,7 @@ import CardArtiste from '../components/CardArtiste.astro';
 import PocketBase from 'pocketbase';
 
 const pb = new PocketBase('http://localhost:8090');
-const artistes = await pb.collection('artiste').getFullList({ sort: 'date_de_representation' });
+const artistes = await pb.collection('artiste').getFullList();
 ---
 
 <Layout title="Jumelages - Artistes">
@@ -12,10 +12,47 @@ const artistes = await pb.collection('artiste').getFullList({ sort: 'date_de_rep
 		<h1 class="text-4xl sm:text-5xl font-bold text-slate-900 text-center mb-12 uppercase tracking-wide">
 			Les Artistes
 		</h1>
-		<div class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-			{artistes.map((artiste) => (
-				<CardArtiste artiste={artiste} />
-			))}
+
+		<!-- Boutons de filtrage par date -->
+		<div class="max-w-7xl mx-auto flex flex-wrap gap-4 justify-center mb-12">
+			<button 
+				id="filterAll"
+				class="px-6 py-3 bg-slate-900 text-white font-bold uppercase tracking-wide rounded-lg hover:bg-slate-800 transition filter-btn active"
+				data-filter="all"
+			>
+				Tous les artistes
+			</button>
+			<button 
+				id="filter29"
+				class="px-6 py-3 border-2 border-slate-900 text-slate-900 font-bold uppercase tracking-wide rounded-lg hover:bg-slate-900 hover:text-white transition filter-btn"
+				data-filter="29"
+			>
+				29 Août
+			</button>
+			<button 
+				id="filter30"
+				class="px-6 py-3 border-2 border-slate-900 text-slate-900 font-bold uppercase tracking-wide rounded-lg hover:bg-slate-900 hover:text-white transition filter-btn"
+				data-filter="30"
+			>
+				30 Août
+			</button>
+		</div>
+
+		<div class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8" id="artistesGrid">
+			{artistes.map((artiste) => {
+				const dateObj = new Date(artiste.date_de_representation);
+				const day = dateObj.getDate();
+				return (
+					<div 
+						class="artiste-card" 
+						data-name={artiste.nom} 
+						data-date={artiste.date_de_representation}
+						data-day={day}
+					>
+						<CardArtiste artiste={artiste} />
+					</div>
+				);
+			})}
 		</div>
 
 		{artistes.length === 0 && (
@@ -25,3 +62,91 @@ const artistes = await pb.collection('artiste').getFullList({ sort: 'date_de_rep
 		)}
 	</section>
 </Layout>
+
+<script>
+	const filterButtons = document.querySelectorAll('.filter-btn') as NodeListOf<HTMLButtonElement>;
+	const sortButtons = document.querySelectorAll('.sort-btn') as NodeListOf<HTMLButtonElement>;
+	const artisteCards = Array.from(document.querySelectorAll('.artiste-card')) as HTMLElement[];
+	let currentFilter = 'all';
+	let currentSort = 'date';
+
+	function applyFiltersAndSort() {
+		// Filtrer les cartes
+		let filteredCards = artisteCards.filter((card) => {
+			if (currentFilter === 'all') {
+				return true;
+			}
+			return card.dataset.day === currentFilter;
+		});
+
+		// Trier les cartes filtrées
+		let sortedCards = [...filteredCards];
+
+		if (currentSort === 'date') {
+			sortedCards.sort((a, b) => {
+				const dateA = new Date(a.dataset.date || '').getTime();
+				const dateB = new Date(b.dataset.date || '').getTime();
+				return dateA - dateB;
+			});
+		} else if (currentSort === 'name') {
+			sortedCards.sort((a, b) => {
+				return ((a.dataset.name || '') as string).localeCompare((b.dataset.name || '') as string, 'fr');
+			});
+		}
+
+		// Réinsérer les cartes dans l'ordre
+		const grid = document.getElementById('artistesGrid');
+		if (grid) {
+			grid.innerHTML = '';
+			sortedCards.forEach((card) => {
+				grid.appendChild(card);
+			});
+
+			// Afficher un message si aucun résultat
+			if (sortedCards.length === 0) {
+				grid.innerHTML = '<div class="col-span-full text-center py-12"><p class="text-lg text-slate-600">Aucun artiste pour cette date</p></div>';
+			}
+		}
+	}
+
+	// Gestion des boutons de filtre
+	filterButtons.forEach((button) => {
+		button.addEventListener('click', () => {
+			const filterType = button.dataset.filter;
+			currentFilter = filterType || 'all';
+
+			// Mettre à jour les styles des boutons
+			filterButtons.forEach((btn) => {
+				btn.classList.remove('active', 'bg-slate-900', 'text-white');
+				btn.classList.add('border-2', 'border-slate-900', 'text-slate-900');
+			});
+
+			button.classList.add('bg-slate-900', 'text-white');
+			button.classList.remove('border-2', 'border-slate-900', 'text-slate-900');
+
+			applyFiltersAndSort();
+		});
+	});
+
+	// Gestion des boutons de tri
+	sortButtons.forEach((button) => {
+		button.addEventListener('click', () => {
+			const sortType = button.dataset.sort;
+			currentSort = sortType || 'date';
+
+			// Mettre à jour les styles des boutons
+			sortButtons.forEach((btn) => {
+				btn.classList.remove('active', 'bg-slate-900', 'text-white');
+				btn.classList.add('border-2', 'border-slate-900', 'text-slate-900');
+			});
+
+			button.classList.add('bg-slate-900', 'text-white');
+			button.classList.remove('border-2', 'border-slate-900', 'text-slate-900');
+
+			applyFiltersAndSort();
+		});
+	});
+
+	// Appliquer le tri initial par date
+	document.getElementById('sortByDate')?.click();
+</script>

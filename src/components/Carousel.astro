@@ -1,4 +1,6 @@
 ---
+import { getImageUrl } from '../../backend/backend.mjs';
+
 interface Props {
   scenes: any[];
 }
@@ -6,36 +8,55 @@ interface Props {
 const { scenes } = Astro.props;
 ---
 
-<!-- Carousel Section -->
 <section class="relative w-full bg-white py-12 px-0 m-0">
-
   <div class="relative flex items-center justify-center px-4 sm:px-6 md:px-12">
+    <!-- Bouton précédent -->
     <button 
-      class="absolute left-0 sm:left-2 z-10 carousel__button carousel__button--prev w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center bg-white rounded-full hover:bg-gray-200 transition-colors shadow-lg flex-shrink-0" 
+      class="absolute left-0 sm:left-2 z-10 w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center bg-white rounded-full hover:bg-gray-200 transition-colors shadow-lg shrink-0" 
       id="prevBtn" 
       aria-label="Défiler vers la gauche"
     >
       <img src="/assets/icones/bouton/fleche-gauche.svg" alt="fleche gauche" class="w-6 h-6" />
     </button>
 
-    <!-- Carousel Container -->
-    <div class="carousel__container flex gap-4 overflow-x-scroll snap-x snap-mandatory scroll-smooth w-full max-w-4xl mx-auto" id="carouselContainer" style="scroll-padding: 2rem;">
-      {scenes.map((scene) => (
-        <div class="carousel__item shrink-0 snap-center w-full">
-          <a href={`/scene/${scene.id}`} class="block">
-            <img 
-              src={`http://localhost:8090/api/files/scene/${scene.id}/${scene.image}`} 
-              alt={scene.name} 
-              class="w-full h-auto object-cover rounded-lg shadow-lg" 
-            />
-          </a>
-        </div>
-      ))}
+    <!-- Conteneur du carousel -->
+    <div 
+      class="carousel__container flex gap-4 overflow-x-scroll snap-x snap-mandatory scroll-smooth w-full max-w-4xl mx-auto" 
+      id="carouselContainer" 
+      style="scroll-padding: 2rem;"
+    >
+      {scenes.map((scene) => {
+        const imageUrl = scene.photo ? getImageUrl(scene, scene.photo) : '';
+        return (
+          <div class="carousel__item shrink-0 snap-center w-full">
+            <a href={`/scenes/${scene.id}`} class="block group">
+              <div class="relative overflow-hidden rounded-lg shadow-lg h-96">
+                {imageUrl && (
+                  <img 
+                    src={imageUrl} 
+                    alt={scene.nom}
+                    class="w-full h-full object-cover group-hover:scale-105 transition duration-300"
+                  />
+                )}
+                {!imageUrl && (
+                  <div class="w-full h-full bg-slate-200 flex items-center justify-center">
+                    <p class="text-slate-600 font-semibold">{scene.nom}</p>
+                  </div>
+                )}
+                <!-- Overlay au survol -->
+                <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition duration-300 flex items-end justify-start p-4">
+                  <h3 class="text-white font-bold text-lg uppercase">{scene.nom}</h3>
+                </div>
+              </div>
+            </a>
+          </div>
+        );
+      })}
     </div>
 
-    <!-- Right navigation button -->
+    <!-- Bouton suivant -->
     <button 
-      class="absolute right-0 sm:right-2 z-10 carousel__button carousel__button--next w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center bg-white rounded-full hover:bg-gray-200 transition-colors shadow-lg flex-shrink-0" 
+      class="absolute right-0 sm:right-2 z-10 w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center bg-white rounded-full hover:bg-gray-200 transition-colors shadow-lg shrink-0" 
       id="nextBtn" 
       aria-label="Défiler vers la droite"
     >
@@ -67,3 +88,4 @@ const { scenes } = Astro.props;
     });
   }
 </script>
+

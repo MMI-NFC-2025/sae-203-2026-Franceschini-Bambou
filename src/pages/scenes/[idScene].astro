@@ -1,0 +1,77 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import CardArtiste from '../../components/CardArtiste.astro';
+import { getImageUrl, sceneID, allartistebysceneId } from '../../../backend/backend.mjs';
+
+const { idScene } = Astro.params;
+
+if (!idScene) {
+  return Astro.redirect('/scene');
+}
+
+const scene = await sceneID(idScene);
+const artistes = await allartistebysceneId(idScene);
+
+if (!scene) {
+  return Astro.redirect('/scene');
+}
+
+const imageUrl = scene.photo ? getImageUrl(scene, scene.photo) : '';
+---
+
+<Layout title={`Jumelages - ${scene.nom}`}>
+	<section class="w-full mt-5 py-12 px-4">
+		<a href="/scene" class="inline-block mb-8 text-slate-600 hover:text-slate-900 font-semibold">
+			← Retour aux scènes
+		</a>
+
+		<div class="max-w-4xl mx-auto">
+			{imageUrl && (
+				<div class="mb-8 rounded-lg overflow-hidden shadow-lg">
+					<img 
+						src={imageUrl} 
+						alt={scene.nom}
+						class="w-full h-auto object-cover"
+					/>
+				</div>
+			)}
+
+			<h1 class="text-4xl sm:text-5xl font-bold text-slate-900 mb-6 uppercase tracking-wide">
+				{scene.nom}
+			</h1>
+
+			{scene.description && (
+				<p class="text-base sm:text-lg text-slate-700 mb-12 leading-relaxed">
+					{scene.description}
+				</p>
+			)}
+
+			{scene.loc && scene.loc.latitude && scene.loc.longitude && (
+				<div class="mb-12 p-4 bg-slate-100 rounded-lg">
+					<p class="text-sm text-slate-600">
+						<strong>Localisation :</strong> Latitude {Number(scene.loc.latitude).toFixed(4)}, Longitude {Number(scene.loc.longitude).toFixed(4)}
+					</p>
+				</div>
+			)}
+
+			{artistes.length > 0 && (
+				<div>
+					<h2 class="text-3xl font-bold text-slate-900 mb-8 uppercase tracking-wide">
+						Artistes de cette scène
+					</h2>
+					<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+						{artistes.map((artiste: any) => (
+							<CardArtiste artiste={artiste} />
+						))}
+					</div>
+				</div>
+			)}
+
+			{artistes.length === 0 && (
+				<div class="text-center py-12">
+					<p class="text-lg text-slate-600">Aucun artiste pour cette scène pour le moment</p>
+				</div>
+			)}
+		</div>
+	</section>
+</Layout>

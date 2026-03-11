@@ -19,10 +19,10 @@ if (artiste.scene) {
   }
 }
 
-const formatDate = (dateString?: string) => {
-  if (!dateString) return '';
+const formatDate = (date_de_representation?: string) => {
+  if (!date_de_representation) return '';
   try {
-    const date = new Date(dateString);
+    const date = new Date(date_de_representation);
     const formatter = new Intl.DateTimeFormat('fr-FR', {
       day: '2-digit',
       month: 'long',
@@ -30,7 +30,6 @@ const formatDate = (dateString?: string) => {
       hour: '2-digit',
       minute: '2-digit',
       hour12: false,
-      timeZone: 'Europe/Paris'
     });
     const parts = formatter.formatToParts(date);
     const day = parts.find(p => p.type === 'day')?.value;
@@ -43,35 +42,35 @@ const formatDate = (dateString?: string) => {
   }
 };
 
-const imageUrl = artiste.image ? getImageUrl(artiste, artiste.image) : '';
+const imageUrl = artiste.photo ? getImageUrl(artiste, artiste.photo) : '';
 ---
 
-<div class="flex flex-col items-center">
-  <div class="w-32 h-32 overflow-hidden border-4 border-slate-900 shadow-lg mb-6">
-    {imageUrl ? (
-      <img 
-        src={imageUrl}
-        alt={artiste.nom || 'Artiste'}
-        class="w-full h-full object-cover"
-      />
-    ) : (
-      <div class="w-full h-full bg-gray-300 flex items-center justify-center text-gray-600 text-xs font-semibold">
-        {artiste.nom || 'Artiste'}
-      </div>
-    )}
+<a href={`/artistes/${artiste.id}`} class="group cursor-pointer">
+  <div class="flex flex-col items-center h-full hover:translate-y-[-4px] transition duration-300">
+    <div class="w-32 h-32 overflow-hidden border-4 border-slate-900 shadow-lg mb-6 group-hover:shadow-xl transition">
+      {imageUrl ? (
+        <img 
+          src={imageUrl}
+          alt={artiste.nom || 'Artiste'}
+          class="w-full h-full object-cover group-hover:scale-105 transition duration-300"
+        />
+      ) : (
+        <div class="w-full h-full bg-gray-300 flex items-center justify-center text-gray-600 text-xs font-semibold">
+          {artiste.nom || 'Artiste'}
+        </div>
+      )}
+    </div>
+
+    <h3 class="text-xl font-bold text-slate-900 mb-4 uppercase tracking-wide line-clamp-2 group-hover:text-blue-600 transition">
+      {artiste.nom}
+    </h3>
+
+    <p class="text-sm text-slate-900 font-semibold mb-2">
+      {formatDate(artiste.date_de_representation)}
+    </p>
+
+    <p class="text-sm text-slate-900 font-semibold uppercase tracking-wide">
+      {artiste.scene ? sceneName : 'Scène non renseignée'}
+    </p>
   </div>
-
-      <h3 class="text-xl font-bold text-slate-900 mb-4 uppercase tracking-wide line-clamp-2">
-        {artiste.nom}
-      </h3>
-
-
-      <p class="text-sm text-slate-900 font-semibold mb-2">
-        {artiste.date_de_representation}
-      </p>
-
-      <p class="text-sm text-slate-900 font-semibold uppercase tracking-wide">
-        {artiste.scene ? sceneName : 'Scène non renseignée'}
-      </p>
-  </div>
-</div>
+</a>

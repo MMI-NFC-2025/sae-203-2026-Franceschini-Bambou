@@ -1,0 +1,37 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import { byDate } from '../../../../backend/backend.mjs';
+import CardArtiste from '../../../components/CardArtiste.astro';
+
+const { idDate } = Astro.params;
+
+if (!idDate) {
+  return Astro.redirect('/artiste');
+}
+
+const recordsDate = await byDate(idDate);
+---
+
+<Layout title={`Jumelages - Artistes du ${idDate}`}>
+  <section class="w-full py-12 px-4">
+    <a href="/artiste" class="inline-block mb-8 text-slate-600 hover:text-slate-900 font-semibold">
+      ← Retour aux artistes
+    </a>
+
+    <h1 class="text-4xl sm:text-5xl font-bold text-slate-900 text-center mb-12 uppercase tracking-wide">
+      Artistes du {idDate}
+    </h1>
+
+    <div class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+      {recordsDate.map((record: any) => (
+        <CardArtiste artiste={record} />
+      ))}
+    </div>
+
+    {recordsDate.length === 0 && (
+      <div class="text-center py-12">
+        <p class="text-lg text-slate-600">Aucun artiste pour cette date</p>
+      </div>
+    )}
+  </section>
+</Layout>

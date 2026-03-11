@@ -1,0 +1,134 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import CarouselArtiste from '../../components/CarouselArtiste.astro';
+import { getImageUrl, artisteID, sceneID } from '../../../backend/backend.mjs';
+
+const { idArtiste } = Astro.params;
+
+if (!idArtiste) {
+  return Astro.redirect('/artiste');
+}
+
+const artiste = await artisteID(idArtiste);
+
+if (!artiste) {
+  return Astro.redirect('/artiste');
+}
+
+let sceneInfos = null;
+if (artiste.scene) {
+  try {
+    sceneInfos = await sceneID(artiste.scene);
+  } catch (e) {
+    console.warn(`Impossible de récupérer la scène pour l'artiste ${artiste.nom}`);
+  }
+}
+
+const imageUrl = artiste.photo ? getImageUrl(artiste, artiste.photo) : '';
+
+// Construire l'array des images du carousel
+const carouselImages: string[] = [];
+
+// Ajouter les images de galerie si elles existent (champ "galerie")
+if (artiste.galerie && Array.isArray(artiste.galerie) && artiste.galerie.length > 0) {
+  artiste.galerie.forEach((imageName: string) => {
+    const url = getImageUrl(artiste, imageName);
+    if (url) carouselImages.push(url);
+  });
+} else if (imageUrl) {
+  // Si pas de galerie, ajouter l'image principale
+  carouselImages.push(imageUrl);
+}
+
+const formatDate = (dateString?: string) => {
+  if (!dateString) return '';
+  try {
+    const date = new Date(dateString);
+    const formatter = new Intl.DateTimeFormat('fr-FR', {
+      day: '2-digit',
+      month: 'long',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+      timeZone: 'Europe/Paris'
+    });
+    const parts = formatter.formatToParts(date);
+    const day = parts.find(p => p.type === 'day')?.value;
+    const month = parts.find(p => p.type === 'month')?.value?.toUpperCase();
+    const hour = parts.find(p => p.type === 'hour')?.value;
+    const minute = parts.find(p => p.type === 'minute')?.value;
+    return `${day} ${month} ${hour}H${minute}`;
+  } catch (e) {
+    return '';
+  }
+};
+---
+
+<Layout title={`Jumelages - ${artiste.nom}`}>
+  <section class="w-full mt-4 py-12 px-4">
+    <a href="/artiste" class="inline-block mb-8 text-slate-600 hover:text-slate-900 font-semibold">
+      ← Retour aux artistes
+    </a>
+
+    <div class="max-w-4xl mx-auto">
+      {/* Carousel des images */}
+     
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+        {imageUrl && (
+          <div class="flex items-center justify-center">
+            <img 
+              src={imageUrl} 
+              alt={artiste.nom}
+              class="w-full h-auto rounded-lg shadow-lg object-cover"
+            />
+          </div>
+        )}
+
+        <div class="flex flex-col justify-center">
+          <h1 class="text-4xl sm:text-5xl font-bold text-slate-900 mb-4 uppercase tracking-wide">
+            {artiste.nom}
+          </h1>
+
+          <div class="space-y-4 mb-6">
+            {artiste.date_de_representation && (
+              <div>
+                <p class="text-sm text-slate-600 font-semibold uppercase tracking-wide">Date de représentation</p>
+                <p class="text-lg font-bold text-slate-900">
+                  {formatDate(artiste.date_de_representation)}
+                </p>
+              </div>
+            )}  
+
+            {sceneInfos && (
+              <div>
+                <p class="text-sm text-slate-600 font-semibold uppercase tracking-wide">Scène</p>
+                <a href={`/scenes/${sceneInfos.id}`} class="text-lg font-bold text-slate-900 hover:text-blue-600 transition">
+                  {sceneInfos.nom}
+                </a>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {artiste.description && (
+        <div class="mb-12">
+          <h2 class="text-3xl font-bold text-slate-900 mb-4 uppercase tracking-wide">À propos</h2>
+          <p class="text-base sm:text-lg text-slate-700 leading-relaxed whitespace-pre-wrap">
+            {artiste.description}
+          </p>
+        </div>
+      )}
+
+      {!artiste.description && !imageUrl && (
+        <div class="text-center py-12">
+          <p class="text-lg text-slate-600">Aucune information supplémentaire disponible pour le moment</p>
+        </div>
+      )}
+
+       <CarouselArtiste images={carouselImages} artisteName={artiste.nom} />
+    </div>
+  </section>
+</Layout>
