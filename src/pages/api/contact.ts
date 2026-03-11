@@ -29,7 +29,7 @@ export const POST: APIRoute = async ({ request }) => {
     }
 
     // Initialiser PocketBase
-    const pbUrl = import.meta.env.PUBLIC_POCKETBASE_URL || 'http://127.0.0.1:8090';
+    const pbUrl = import.meta.env.PUBLIC_POCKETBASE_URL || 'https://jumelages.bambou-franceschini.fr';
     const pb = new PocketBase(pbUrl);
 
     // Créer un enregistrement dans la collection "contact"

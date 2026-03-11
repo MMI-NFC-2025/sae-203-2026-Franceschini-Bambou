@@ -3,7 +3,7 @@ import { getImageUrl } from '../../backend/backend.mjs';
 import PocketBase from 'pocketbase';
 
 const { artiste } = Astro.props;
-const pbUrl = import.meta.env.PUBLIC_POCKETBASE_URL || 'http://localhost:8090';
+const pbUrl = import.meta.env.PUBLIC_POCKETBASE_URL || 'https://jumelages.bambou-franceschini.fr';
 const pb = new PocketBase(pbUrl);
 
 if (!artiste) {
