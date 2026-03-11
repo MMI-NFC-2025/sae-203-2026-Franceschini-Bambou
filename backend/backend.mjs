@@ -1,6 +1,6 @@
 import PocketBase from 'pocketbase';
 
-const pbUrl = process.env.PUBLIC_POCKETBASE_URL || 'https://jumelages.bambou-franceschini.fr/';
+const pbUrl = 'https://jumelages.bambou-franceschini.fr';
 const pb = new PocketBase(pbUrl);
 
 export function getImageUrl(record, filename) {
