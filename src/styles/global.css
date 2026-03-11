@@ -1,8 +1,11 @@
 /* stylelint-disable */
 @import "tailwindcss";
-/* stylelint-enable */
 
+@theme {
+  --font-family: 'Alumni Sans SC Variable', sans-serif;
+}
+    
 body {
-  font-family: 'Alumni Sans SC Variable', sans-serif;
+    @apply font-family;
 }
 
