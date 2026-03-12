@@ -1,10 +1,7 @@
 ---
-import { getImageUrl } from '../../backend/backend.mjs';
-import PocketBase from 'pocketbase';
+import { getImageUrl, sceneID } from '../../backend/backend.mjs';
 
 const { artiste } = Astro.props;
-const pbUrl = import.meta.env.PUBLIC_POCKETBASE_URL || 'https://jumelages.bambou-franceschini.fr';
-const pb = new PocketBase(pbUrl);
 
 if (!artiste) {
   throw new Error('CardArtiste require une prop "artiste"');
@@ -13,7 +10,7 @@ if (!artiste) {
 let sceneName = '';
 if (artiste.scene) {
   try {
-    const scene = await pb.collection('scene').getOne(artiste.scene);
+    const scene = await sceneID(artiste.scene);
     sceneName = scene.nom || '';
   } catch (e) {
     console.warn(`Impossible de récupérer la scène pour l'artiste ${artiste.nom}`);

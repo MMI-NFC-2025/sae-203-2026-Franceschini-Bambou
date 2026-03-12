@@ -5,7 +5,7 @@ const pb = new PocketBase(pbUrl);
 
 export function getImageUrl(record, filename) {
     if (!record || !filename) return null;
-    return `https://jumelages.bambou-franceschini.fr/api/files/${record.collectionId}/${record.id}/${filename}`;
+    return `${pbUrl}/api/files/${record.collectionId}/${record.id}/${filename}`;
 }
 
 export async function artistesSorted() { 
