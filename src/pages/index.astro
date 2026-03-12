@@ -5,7 +5,12 @@ import PocketBase from 'pocketbase';
 
 const pbUrl = import.meta.env.PUBLIC_POCKETBASE_URL || 'https://jumelages.bambou-franceschini.fr';
 const pb = new PocketBase(pbUrl);
-const scenes = await pb.collection('scene').getFullList();
+let scenes = [];
+try {
+  scenes = await pb.collection('scene').getFullList();
+} catch (e) {
+  console.error('Erreur PocketBase (scenes):', e);
+}
 ---
 
 <Layout title="Jumelages - Accueil">

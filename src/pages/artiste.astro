@@ -3,8 +3,14 @@ import Layout from '../layouts/Layout.astro';
 import CardArtiste from '../components/CardArtiste.astro';
 import PocketBase from 'pocketbase';
 
-const pb = new PocketBase('http://localhost:8090');
-const artistes = await pb.collection('artiste').getFullList();
+const pbUrl = import.meta.env.PUBLIC_POCKETBASE_URL || 'https://jumelages.bambou-franceschini.fr';
+const pb = new PocketBase(pbUrl);
+let artistes = [];
+try {
+  artistes = await pb.collection('artiste').getFullList();
+} catch (e) {
+  console.error('Erreur PocketBase (artistes):', e);
+}
 ---
 
 <Layout title="Jumelages - Artistes">
