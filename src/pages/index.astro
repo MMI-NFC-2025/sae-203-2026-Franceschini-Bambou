@@ -1,16 +1,10 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Carousel from '../components/Carousel.astro';
-import PocketBase from 'pocketbase';
+import { scenesName } from '../../backend/backend.mjs';
 
-const pbUrl = import.meta.env.PUBLIC_POCKETBASE_URL || 'https://jumelages.bambou-franceschini.fr';
-const pb = new PocketBase(pbUrl);
-let scenes = [];
-try {
-  scenes = await pb.collection('scene').getFullList();
-} catch (e) {
-  console.error('Erreur PocketBase (scenes):', e);
-}
+const scenes = await scenesName();
+
 ---
 
 <Layout title="Jumelages - Accueil">
